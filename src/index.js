@@ -9,6 +9,7 @@ const useVisibilityChange = (config = {}) => {
     onHide = noop,
     onShow = noop,
     storageKey = 'useSaveRestoreState.lastSeenDateUTC',
+    shouldReturnResult = onHide === noop && onShow === noop,
     storageProvider = localStorage,
     element = global.document,
   } = config;
@@ -24,7 +25,8 @@ const useVisibilityChange = (config = {}) => {
     [storageProvider]
   );
 
-  const [result, setResult] = useState(buildResult);
+  const initialValue = (shouldReturnResult && buildResult) || undefined;
+  const [result, setResult] = useState(initialValue);
 
   useEventListener(visibilityChangeEvent, () => {
     const isHidden = element.visibilityState === 'hidden';
@@ -35,7 +37,9 @@ const useVisibilityChange = (config = {}) => {
     } else {
       // callback to have state restored
       const callbackResult = buildResult();
-      setResult(callbackResult);
+      if (shouldReturnResult) {
+        setResult(callbackResult);
+      }
       onShow(callbackResult);
     }
   }, element);

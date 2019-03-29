@@ -17,7 +17,7 @@ Know how long it's been since a user has "seen" your app.
 
 ![use-visibility-change](https://user-images.githubusercontent.com/887639/55264178-c34caa00-5230-11e9-8351-f1983c62624c.gif)
 
-This hook was inspired by this article on [Web Platorm News](https://webplatform.news/issues/2019-03-27#web-pages-can-now-detect-when-chrome-s-window-is-covered-by-another-window).
+This hook was inspired by this piece on [Web Platform News](https://webplatform.news/issues/2019-03-27#web-pages-can-now-detect-when-chrome-s-window-is-covered-by-another-window).
 
 
 ## Installation
@@ -37,7 +37,7 @@ $ yarn add use-visibility-change
 Here is a basic setup.
 
 ```js
-const data = useVisibilityChange(config);
+const result = useVisibilityChange(config);
 ```
 
 ### Parameters
@@ -49,11 +49,12 @@ You pass a single config object with the following properties.
 | `onHide` | An optional callback function that is called upon closing or navigation away from the current tab, or minimizing the browser. You could use this callback to save the application state. |
 | `onShow` | An optional callback function that is called with the same thing as the returned object when the view is restored. You could use this callback to restore the application state, or reset the user's experience if they have been gone for some time. |
 | `storageKey` | A string that will be used as the key when persisting the last seen date. Default = "useSaveRestoreState.lastSeenDateUTC" |
+| `shouldReturnResult` | A boolean that, if true, will cause `useVisibilityChange` to return a result object, otherwise it will return `undefined` and not update its internal state. This will help to decrease unnecessary re-renders. Default = `false` if `onHide` and `onShow` are specified, else `true`. You should normally never have to set this unless you have `onHide` and/or `onShow` callbacks _and_ wish to have a result returned.  |
 
 
 ### Return
 
-This hook returns a data object with the following keys.
+This hook returns a result object with the following keys.
 
 | Property   | Description                                                                                     |
 | :---------- | :---------------------------------------------------------------------------------------------- |

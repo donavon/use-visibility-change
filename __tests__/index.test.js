@@ -46,6 +46,49 @@ describe('useVisibilityChange', () => {
     expect(result).toEqual({ lastSeenDate: null });
   });
 
+  test('returns undefined if onShow or onHide is specified`', () => {
+    const storageProvider = createMockStorage(null);
+    const noop = () => {};
+    let result;
+    testHook(() => {
+      result = useVisibilityChange({ storageProvider, onShow: noop });
+    });
+    expect(result).toBeUndefined();
+
+    testHook(() => {
+      result = useVisibilityChange({ storageProvider, onHide: noop });
+    });
+    expect(result).toBeUndefined();
+
+    testHook(() => {
+      result = useVisibilityChange({ storageProvider, onShow: noop, onHide: noop });
+    });
+    expect(result).toBeUndefined();
+  });
+
+  test('returns undefined if onShow or onHide is specified unloess you set shouldReturnResult to true`', () => {
+    const storageProvider = createMockStorage(null);
+    const noop = () => {};
+    let result;
+    testHook(() => {
+      result = useVisibilityChange({ storageProvider, onShow: noop, shouldReturnResult: true });
+    });
+    expect(result).toEqual({ lastSeenDate: null });
+
+    testHook(() => {
+      result = useVisibilityChange({ storageProvider, onHide: noop, shouldReturnResult: true });
+    });
+    expect(result).toEqual({ lastSeenDate: null });
+
+    testHook(() => {
+      result = useVisibilityChange({
+        storageProvider, onHide: noop, onShow: noop, shouldReturnResult: true,
+      });
+    });
+    expect(result).toEqual({ lastSeenDate: null });
+  });
+
+
   test('returns an object containing lastSeenDate=Date if user has visited previously`', () => {
     let result;
     testHook(() => {
@@ -55,32 +98,64 @@ describe('useVisibilityChange', () => {
     expect(result).toEqual({ lastSeenDate: date });
   });
 
-  test('will call onSave when leaving from view`', () => {
+  test('will call onHide when leaving from view`', () => {
     const handler = jest.fn();
     const element = createMockElement();
     const storageProvider = createMockStorage(null);
 
+    let result;
     testHook(() => {
-      useVisibilityChange({ onHide: handler, storageProvider, element });
+      result = useVisibilityChange({ onHide: handler, storageProvider, element });
     });
 
     element.visibilityState = 'hidden';
     element.dispatchEvent(new Event('visibilitychange'));
 
     expect(handler).toHaveBeenCalled();
+    expect(result).toBeUndefined();
   });
 
-  test('will call restoreCallback when returning to view`', () => {
+  test('will call onShow when returning to view (no result)`', (done) => {
     const handler = jest.fn();
     const element = createMockElement();
     const storageProvider = createMockStorage(date.toISOString());
 
+    let result;
     testHook(() => {
-      useVisibilityChange({ onShow: handler, storageProvider, element });
+      result = useVisibilityChange({ onShow: handler, storageProvider, element });
     });
+    expect(result).toBeUndefined();
+
     element.visibilityState = 'visible';
     element.dispatchEvent(new Event('visibilitychange'));
 
     expect(handler).toHaveBeenCalledWith({ lastSeenDate: date });
+    setTimeout(() => {
+      expect(result).toBeUndefined();
+      done();
+    }, 1);
+  });
+
+  test('will call onShow when returning to view (return result)`', (done) => {
+    const handler = jest.fn();
+    const element = createMockElement();
+    const storageProvider = createMockStorage(date.toISOString());
+
+    let result;
+    testHook(() => {
+      result = useVisibilityChange({
+        onShow: handler, storageProvider, element, shouldReturnResult: true,
+      });
+    });
+    expect(result).toEqual({ lastSeenDate: date });
+
+    element.visibilityState = 'visible';
+    element.dispatchEvent(new Event('visibilitychange'));
+
+    expect(handler).toHaveBeenCalledWith({ lastSeenDate: date });
+    setTimeout(() => {
+      expect(result).toEqual({ lastSeenDate: date });
+      done();
+    }, 1);
   });
 });
