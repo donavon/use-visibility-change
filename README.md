@@ -1,4 +1,5 @@
 # use-visibility-change
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 A custom React Hook that provides easy access to the visibilitychange event.
 Know how long it's been since a user has "seen" your app.
@@ -90,3 +91,15 @@ You can view/edit the sample code above on CodeSandbox.
 ## License
 
 **[MIT](LICENSE)** Licensed
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="http://donavon.com"><img src="https://avatars3.githubusercontent.com/u/887639?v=4" width="100px;" alt="Donavon West"/><br /><sub><b>Donavon West</b></sub></a><br /><a href="#ideas-donavon" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-donavon" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-donavon" title="Maintenance">🚧</a> <a href="#review-donavon" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/donavon/use-visibility-change/commits?author=donavon" title="Code">💻</a> <a href="#design-donavon" title="Design">🎨</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
