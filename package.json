@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Know how long it's been since a user has \"seen\" your app.",
   "main": "dist/use-visibility-change.js",
   "umd:main": "dist/use-visibility-change.umd.js",

@@ -64,10 +64,7 @@ const App = () => {
   const { lastSeenDate } = useVisibilityChange();
   return (
     <div>
-      <p>
-        Obsure the complete browser window, change tabs, navigate away, or close
-        the tab.
-      </p>
+      <p>Change tabs, navigate away, or close the tab. Then come back.</p>
       {lastSeenDate ? (
         <>
           <p className="hidden-for">
