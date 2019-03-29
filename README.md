@@ -9,9 +9,9 @@ Know how long it's been since a user has "seen" your app.
 
 🕐 Know how long the user has been away from your page.
 
-🕑 `saveCallback` called when the user changes tabs, closes the current tab, or minimizes the browser.
+🕑 `onHide` called when the user changes tabs, closes the current tab, or minimizes the browser.
 
-🕒 `restoreCallback` when the page is once again visible to the user (passing the `lastSeenDate`).
+🕒 `onShow` when the page is once again visible to the user (passing the `lastSeenDate`).
 
 🕓 Persists `lastSeenDate` to `localStorage`.
 
@@ -35,17 +35,19 @@ $ yarn add use-visibility-change
 Here is a basic setup.
 
 ```js
-const data = useVisibilityChange(saveCallback, restoreCallback);
+const data = useVisibilityChange(config);
 ```
 
 ### Parameters
 
-Here are the parameters that you can use. (\* = optional)
+You pass a single config object with the following properties.
 
 | Parameter   | Description                                                                                     |
 | :---------- | :---------------------------------------------------------------------------------------------- |
-| `saveCallback` | An optional callback function that is called upon closing or navigation away from the current tab, or minimizing the browser. You could use this callback to save the application state. |
-| `restoreCallback` | An optional callback function that is called with `data` when the view is restored. You could use this callback to restore the application state, or reset the user's experience if they have been gone for some time. |
+| `onHide` | An optional callback function that is called upon closing or navigation away from the current tab, or minimizing the browser. You could use this callback to save the application state. |
+| `onShow` | An optional callback function that is called with the same thing as the returned object when the view is restored. You could use this callback to restore the application state, or reset the user's experience if they have been gone for some time. |
+| `storageKey` | A string that will be used as the key when persisting the last seen date. Default = "useSaveRestoreState.lastSeenDateUTC" |
+
 
 ### Return
 
@@ -55,7 +57,7 @@ This hook returns a data object with the following keys.
 | :---------- | :---------------------------------------------------------------------------------------------- |
 | `lastSeenDate` | A Date object representing the date that the user was last "seen". Returns `null` if this is the first time the user visited your site with this browser. |
 
-## Example
+## Example 1
 
 Here we have a simple case where we render how long it's been since the user has "seen" your app.
 
@@ -81,11 +83,45 @@ const App = () => {
 };
 ```
 
-## Live demo
+### Live demo
 
 You can view/edit the sample code above on CodeSandbox.
 
 [![Edit demo app on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vm6l68k427)
+
+## Example 2
+
+Here is another example that uses the `onHide` and `onShow` callbacks.
+
+```js
+let savedTitle;
+
+const onHide = () => {
+  savedTitle = document.title;
+  document.title = '👋 Bye. See ya later!';
+};
+
+const onShow = () => {
+  document.title = savedTitle;
+};
+
+const App = () => {
+  useVisibilityChange({ onShow, onHide });
+  return (
+    <>
+      <h1>useVisibilityChange demo.</h1>
+      <p>Change tabs and notice the title.</p>
+    </>
+  );
+};
+```
+
+### Live demo
+
+You can view/edit the sample code above on CodeSandbox.
+
+[![Edit demo app on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/xj6vz7wn1z)
+
 
 ## License
 

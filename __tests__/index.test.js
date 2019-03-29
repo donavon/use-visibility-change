@@ -29,16 +29,18 @@ const createMockStorage = value => ({
 });
 
 describe('useVisibilityChange', () => {
-  test('all parameters are optional`', () => {
+  test('takes an optional config object`', () => {
     testHook(() => {
       useVisibilityChange();
     });
   });
 
   test('returns an object containing lastSeenDate=null if user has never visited your site`', () => {
+    const storageProvider = createMockStorage(null);
+
     let result;
     testHook(() => {
-      result = useVisibilityChange(undefined, undefined, createMockStorage(null));
+      result = useVisibilityChange({ storageProvider });
     });
 
     expect(result).toEqual({ lastSeenDate: null });
@@ -47,35 +49,37 @@ describe('useVisibilityChange', () => {
   test('returns an object containing lastSeenDate=Date if user has visited previously`', () => {
     let result;
     testHook(() => {
-      result = useVisibilityChange(undefined, undefined, createMockStorage(date.toISOString()));
+      result = useVisibilityChange({ storageProvider: createMockStorage(date.toISOString()) });
     });
 
     expect(result).toEqual({ lastSeenDate: date });
   });
 
-  test('will call saveCallback when leaving from view`', () => {
+  test('will call onSave when leaving from view`', () => {
     const handler = jest.fn();
-    const mockElement = createMockElement();
+    const element = createMockElement();
+    const storageProvider = createMockStorage(null);
 
     testHook(() => {
-      useVisibilityChange(handler, undefined, createMockStorage(), mockElement);
+      useVisibilityChange({ onHide: handler, storageProvider, element });
     });
 
-    mockElement.visibilityState = 'hidden';
-    mockElement.dispatchEvent(new Event('visibilitychange'));
+    element.visibilityState = 'hidden';
+    element.dispatchEvent(new Event('visibilitychange'));
 
     expect(handler).toHaveBeenCalled();
   });
 
   test('will call restoreCallback when returning to view`', () => {
     const handler = jest.fn();
-    const mockElement = createMockElement();
+    const element = createMockElement();
+    const storageProvider = createMockStorage(date.toISOString());
 
     testHook(() => {
-      useVisibilityChange(undefined, handler, createMockStorage(date.toISOString()), mockElement);
+      useVisibilityChange({ onShow: handler, storageProvider, element });
     });
-    mockElement.visibilityState = 'visible';
-    mockElement.dispatchEvent(new Event('visibilitychange'));
+    element.visibilityState = 'visible';
+    element.dispatchEvent(new Event('visibilitychange'));
 
     expect(handler).toHaveBeenCalledWith({ lastSeenDate: date });
   });
