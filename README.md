@@ -15,6 +15,8 @@ Know how long it's been since a user has "seen" your app.
 
 🕓 Persists `lastSeenDate` to `localStorage`.
 
+![use-visibility-change](https://user-images.githubusercontent.com/887639/55264178-c34caa00-5230-11e9-8351-f1983c62624c.gif)
+
 This hook was inspired by this article on [Web Platorm News](https://webplatform.news/issues/2019-03-27#web-pages-can-now-detect-when-chrome-s-window-is-covered-by-another-window).
 
 
@@ -92,6 +94,8 @@ You can view/edit the sample code above on CodeSandbox.
 ## Example 2
 
 Here is another example that uses the `onHide` and `onShow` callbacks.
+
+![use-visibility-change-2](https://user-images.githubusercontent.com/887639/55264260-04dd5500-5231-11e9-97e4-024eb711a75f.gif)
 
 ```js
 let savedTitle;
