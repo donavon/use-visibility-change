@@ -1,9 +1,9 @@
 node_modules
+dist
 src
 .editorconfig
 .eslintrc
 .babelrc
-__tests__
 coverage
 .prettierrc
 .travis.yml
